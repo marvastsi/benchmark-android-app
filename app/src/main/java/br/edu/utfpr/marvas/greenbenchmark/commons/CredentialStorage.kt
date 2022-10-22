@@ -36,4 +36,8 @@ class CredentialStorage(
     }
 }
 
-data class Token(val type: String = "Bearer", val value: String)
+data class Token(val type: String = "Bearer", val value: String) {
+    override fun toString(): String {
+        return type.plus(" $value")
+    }
+}

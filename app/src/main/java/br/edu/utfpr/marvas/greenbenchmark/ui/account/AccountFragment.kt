@@ -19,10 +19,8 @@ import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
-
     private lateinit var accountViewModel: AccountViewModel
     private var _binding: FragmentAccountBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -30,7 +28,6 @@ class AccountFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,8 +35,10 @@ class AccountFragment : Fragment() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountViewModel =
-            ViewModelProvider(this, AccountViewModelFactory())[AccountViewModel::class.java]
+        accountViewModel = ViewModelProvider(
+            this,
+            AccountViewModelFactory(requireContext())
+        )[AccountViewModel::class.java]
 
         val firstNameEditText = binding.firstName
         val lastNameEditText = binding.lastName

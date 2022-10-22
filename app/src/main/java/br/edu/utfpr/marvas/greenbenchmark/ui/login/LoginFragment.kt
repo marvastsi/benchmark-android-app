@@ -17,10 +17,8 @@ import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
-
     private lateinit var loginViewModel: LoginViewModel
     private var _binding: FragmentLoginBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -37,7 +35,7 @@ class LoginFragment : Fragment() {
         loginViewModel = ViewModelProvider(
             this,
             LoginViewModelFactory(requireContext())
-        ).get(LoginViewModel::class.java)
+        )[LoginViewModel::class.java]
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password

@@ -4,12 +4,16 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.data.AccountRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.Result
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
+import kotlinx.coroutines.launch
 
-class AccountViewModel(private val accountRepository: AccountRepository) : ViewModel() {
+class AccountViewModel(
+    private val accountRepository: AccountRepository
+) : ViewModel() {
 
     private val _accountForm = MutableLiveData<AccountFormState>()
     val accountFormState: LiveData<AccountFormState> = _accountForm
@@ -18,15 +22,16 @@ class AccountViewModel(private val accountRepository: AccountRepository) : ViewM
     val accountResult: LiveData<CreateAccountResult> = _createAccountResult
 
     fun save(account: Account) {
-        // can be launched in a separate asynchronous job
-        val result = accountRepository.save(account)
-
-        if (result is Result.Success) {
-            _createAccountResult.postValue(
-                CreateAccountResult(success = AccountCreatedView.fromAccount(result.data))
-            )
-        } else {
-            _createAccountResult.postValue(CreateAccountResult(error = R.string.login_failed))
+        viewModelScope.launch {
+            when (val result = accountRepository.save(account)) {
+                is Result.Success ->
+                    _createAccountResult.postValue(
+                        CreateAccountResult(
+                            success = AccountCreatedView.fromAccount(result.data)
+                        )
+                    )
+                else -> _createAccountResult.postValue(CreateAccountResult(error = R.string.login_failed))
+            }
         }
     }
 

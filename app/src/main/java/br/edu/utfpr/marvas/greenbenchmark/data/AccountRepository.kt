@@ -1,46 +1,35 @@
 package br.edu.utfpr.marvas.greenbenchmark.data
 
+import android.util.Log
+import br.edu.utfpr.marvas.greenbenchmark.commons.CredentialStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Tags
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
+import br.edu.utfpr.marvas.greenbenchmark.http.HttpClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-/**
- * Class that requests account information from the remote data source and
- * maintains an in-memory cache of account information.
- */
+class AccountRepository(
+    private val credentialStorage: CredentialStorage,
+    private val serverUrl: String
+) {
 
-class AccountRepository(private val dataSource: AccountDataSource) {
-
-    // in-memory cache of the account object
-    var account: Account? = null
-        private set
-
-    val accountIsPresent: Boolean
-        get() = account != null
-
-    init {
-        account = null
-    }
-
-    fun save(account: Account): Result<Account> {
-        // handle save
-        val result = dataSource.save(account)
-
-        if (result is Result.Success) {
-            setSavedAccount(result.data)
+    suspend fun save(account: Account): Result<Account> {
+        return withContext(Dispatchers.IO) {
+            val token = credentialStorage.getToken()
+            val client = HttpClient()
+            try {
+                val response = client.post(
+                    serverUrl,
+                    account,
+                    Account::class.java,
+                    HttpClient.createDefaultHeader(authorization = token.toString())
+                ).body!!
+                Log.d(Tags.ACCOUNT_FORM, response.toString())
+                Result.Success(response)
+            } catch (ex: Exception) {
+                Log.e(Tags.ACCOUNT_FORM, "${ex.message}")
+                Result.Error(ex)
+            }
         }
-
-        return result
-    }
-
-    fun find(accountId: String): Result<Account> {
-        val result = dataSource.find(accountId)
-
-        if (result is Result.Success) {
-            account = result.data
-        }
-        return result
-    }
-
-    private fun setSavedAccount(savedAccount: Account) {
-        this.account = savedAccount
     }
 }

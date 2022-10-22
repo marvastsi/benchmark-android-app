@@ -16,7 +16,7 @@ data class AccountCreatedView(
 ) {
     companion object {
         fun fromAccount(account: Account) = AccountCreatedView(
-            accountId = account.accountId,
+            accountId = account.id,
             displayName = account.firstName + account.lastName,
             email = account.email,
             phoneNumber = "${account.phoneCountryCode} ${account.phoneNumber}",

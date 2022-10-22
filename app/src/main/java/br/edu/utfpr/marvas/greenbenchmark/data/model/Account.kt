@@ -6,7 +6,7 @@ import java.util.*
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
 data class Account(
-    val accountId: String = UUID.randomUUID().toString(),
+    val id: String = UUID.randomUUID().toString(),
     val firstName: String,
     val lastName: String,
     val email: String,
