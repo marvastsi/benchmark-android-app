@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/StartFragment">
+
+    <fragment
+        android:id="@+id/StartFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.StartFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_start">
+
+        <action
+            android:id="@+id/action_StartFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+
+        <action
+            android:id="@+id/action_StartFragment_to_AccountFragment"
+            app:destination="@id/AccountFragment" />
+
+        <action
+            android:id="@+id/action_StartFragment_to_DownloadFragment"
+            app:destination="@id/DownloadFragment" />
+
+        <action
+            android:id="@+id/action_StartFragment_to_UploadFragment"
+            app:destination="@id/UploadFragment" />
+
+        <action
+            android:id="@+id/action_StartFragment_to_MediaFragment"
+            app:destination="@id/MediaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.login.LoginFragment"
+        android:label="@string/action_sign_in"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_LoginFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AccountFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.account.AccountFragment"
+        android:label="@string/action_sign_in"
+        tools:layout="@layout/fragment_account">
+
+        <action
+            android:id="@+id/action_AccountFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/DownloadFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.download.DownloadFragment"
+        android:label="@string/action_download"
+        tools:layout="@layout/fragment_download">
+
+        <action
+            android:id="@+id/action_DownloadFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/UploadFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.upload.UploadFragment"
+        android:label="@string/action_upload"
+        tools:layout="@layout/fragment_upload">
+
+        <action
+            android:id="@+id/action_UploadFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MediaFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.media.MediaFragment"
+        android:label="@string/action_media"
+        tools:layout="@layout/fragment_media">
+
+        <action
+            android:id="@+id/action_MediaFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+</navigation>
