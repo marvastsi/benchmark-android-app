@@ -1,5 +1,8 @@
 package br.edu.utfpr.marvas.greenbenchmark
 
+import android.Manifest
+import android.annotation.TargetApi
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,9 +15,24 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import br.edu.utfpr.marvas.greenbenchmark.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private fun shouldAskPermissions(): Boolean {
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
+    }
+
+    @TargetApi(23)
+    fun askPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        val requestCode = 200
+        requestPermissions(permissions, requestCode)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +49,10 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+        }
+
+        if (shouldAskPermissions()) {
+            askPermissions()
         }
     }
 

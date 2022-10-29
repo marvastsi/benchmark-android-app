@@ -1,6 +1,7 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.upload
 
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentUploadBinding
+import java.io.File
 
 class UploadFragment : Fragment() {
     private lateinit var uploadViewModel: UploadViewModel
@@ -84,17 +86,29 @@ class UploadFragment : Fragment() {
         fileNameEditText.addTextChangedListener(afterTextChangedListener)
         fileNameEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                uploadViewModel.upload(fileNameEditText.text.toString())
+                val fileName: String = fileNameEditText.text.toString()
+                uploadViewModel.upload(getFile(fileName))
             }
             false
         }
 
         uploadButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
-            uploadViewModel.upload(fileNameEditText.text.toString())
+            val fileName: String = fileNameEditText.text.toString()
+            uploadViewModel.upload(getFile(fileName))
         }
 
+        fileNameEditText.setText(R.string.file_to_upload)
+
         uploadButton.performClick()
+    }
+
+    private fun getFile(fileName: String): File {
+        return File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            fileName
+
+        )
     }
 
     private fun updateUiWithFile(model: UploadFileView) {

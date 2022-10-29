@@ -91,8 +91,11 @@ class DownloadFragment : Fragment() {
 
         downloadButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
-            downloadViewModel.download(fileNameEditText.text.toString())
+            val fileName: String = fileNameEditText.text.toString()
+            downloadViewModel.download(fileName)
         }
+
+        fileNameEditText.setText(R.string.file_to_download)
 
         downloadButton.performClick()
     }

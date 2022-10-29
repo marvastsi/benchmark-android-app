@@ -8,6 +8,7 @@ import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.data.Result
 import br.edu.utfpr.marvas.greenbenchmark.data.UploadRepository
 import kotlinx.coroutines.launch
+import java.io.File
 
 class UploadViewModel(
     private val uploadRepository: UploadRepository
@@ -19,9 +20,9 @@ class UploadViewModel(
     private val _uploadFileResult = MutableLiveData<UploadFileResult>()
     val uploadResult: LiveData<UploadFileResult> = _uploadFileResult
 
-    fun upload(fileName: String) {
+    fun upload(file: File) {
         viewModelScope.launch {
-            when (val result = uploadRepository.upload(fileName)) {
+            when (val result = uploadRepository.upload(file)) {
                 is Result.Success ->
                     _uploadFileResult.postValue(
                         UploadFileResult(

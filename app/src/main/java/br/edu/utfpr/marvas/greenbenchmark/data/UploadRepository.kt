@@ -7,20 +7,21 @@ import br.edu.utfpr.marvas.greenbenchmark.data.model.UploadFile
 import br.edu.utfpr.marvas.greenbenchmark.http.HttpClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class UploadRepository(
     private val credentialStorage: CredentialStorage,
     private val serverUrl: String
 ) {
 
-    suspend fun upload(filePath: String): Result<UploadFile> {
+    suspend fun upload(file: File): Result<UploadFile> {
         return withContext(Dispatchers.IO) {
             val token = credentialStorage.getToken()
             val client = HttpClient()
             try {
                 val response = client.postFile(
                     serverUrl,
-                    filePath,
+                    file,
                     UploadFile::class.java,
                     HttpClient.createDefaultHeader(authorization = token.toString())
                 ).body!!

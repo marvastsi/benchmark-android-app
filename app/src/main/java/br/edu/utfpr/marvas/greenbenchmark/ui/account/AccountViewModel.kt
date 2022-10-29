@@ -50,7 +50,8 @@ class AccountViewModel(
         } else if (!isPhoneNumberValid(phoneNumber)) {
             _accountForm.value = AccountFormState(phoneNumberError = R.string.invalid_phone_number)
         } else if (!isPhoneCountryCodeValid(phoneCountryCode)) {
-            _accountForm.value = AccountFormState(phoneCountryCodeError = R.string.invalid_phone_country_code)
+            _accountForm.value =
+                AccountFormState(phoneCountryCodeError = R.string.invalid_phone_country_code)
         } else if (!isUserNameValid(username)) {
             _accountForm.value = AccountFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
@@ -60,12 +61,12 @@ class AccountViewModel(
         }
     }
 
-    private fun isEmailValid(username: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(username).matches()
+    private fun isEmailValid(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun isPhoneNumberValid(username: String): Boolean {
-        return username.isNotBlank() && Patterns.PHONE.matcher(username).matches()
+    private fun isPhoneNumberValid(phoneNumber: String): Boolean {
+        return phoneNumber.isNotBlank() && Patterns.PHONE.matcher(phoneNumber).matches()
     }
 
     private fun isPhoneCountryCodeValid(phoneCountryCode: String): Boolean {

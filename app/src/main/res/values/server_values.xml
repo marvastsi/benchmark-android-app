@@ -4,8 +4,8 @@
     <string name="login_uri">/login</string>
     <string name="account_uri">/accounts</string>
     <string name="file_upload_uri">/files/upload</string>
-    <string name="file_upload_path">/upload/image-file.png</string>
-    <string name="file_download_uri">/files/download/image-file.png</string>
-    <string name="file_download_path">/download/image-file.png</string>
+    <string name="file_to_upload">image-file.png</string>
+    <string name="file_download_uri">/files/download</string>
+    <string name="file_to_download">image-file.png</string>
     <string name="test_load">10</string>
 </resources>

@@ -1,8 +1,15 @@
 package br.edu.utfpr.marvas.greenbenchmark.http
 
+import android.os.Environment
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -23,10 +30,8 @@ class HttpClient {
 
                 if (isSuccess(responseCode)) {
                     val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                    val responseBody = Gson().fromJson(
-                        inputStreamReader,
-                        responseClass
-                    )
+                    val responseBody = Gson().fromJson(inputStreamReader, responseClass)
+
                     HttpResponse(
                         status = responseCode,
                         message = responseMessage,
@@ -56,18 +61,13 @@ class HttpClient {
                 doInput = true
 
                 val outputStreamWriter = OutputStreamWriter(outputStream, "UTF-8")
-                Gson().toJson(
-                    body,
-                    outputStreamWriter
-                )
+                Gson().toJson(body, outputStreamWriter)
                 outputStreamWriter.flush()
 
                 if (isSuccess(responseCode)) {
                     val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                    val responseBody = Gson().fromJson(
-                        inputStreamReader,
-                        responseClass
-                    )
+                    val responseBody = Gson().fromJson(inputStreamReader, responseClass)
+
                     HttpResponse(
                         status = responseCode,
                         message = responseMessage,
@@ -97,19 +97,13 @@ class HttpClient {
                 doOutput = true
 
                 val outputStreamWriter = OutputStreamWriter(outputStream, "UTF-8")
-                Gson().toJson(
-                    body,
-                    outputStreamWriter
-                )
+                Gson().toJson(body, outputStreamWriter)
                 outputStreamWriter.flush()
 
-//                val typeOfSrc: Type = object : TypeToken<Collection<T?>?>() {}.type
                 if (isSuccess(responseCode)) {
                     val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                    val responseBody = Gson().fromJson(
-                        inputStreamReader,
-                        responseClass
-                    )
+                    val responseBody = Gson().fromJson(inputStreamReader, responseClass)
+
                     HttpResponse(
                         status = responseCode,
                         message = responseMessage,
@@ -124,10 +118,11 @@ class HttpClient {
 
     fun getFile(
         url: String,
-        filePath: String,
+        fileName: String,
         headers: Array<Pair<String, String>> = emptyArray()
     ): HttpResponse<File> {
         return runBlocking {
+            println(">>>>>> URI=> $url")
             val urlConnection = URL(url)
             with(urlConnection.openConnection() as HttpURLConnection) {
                 headers.forEach {
@@ -136,18 +131,7 @@ class HttpClient {
                 requestMethod = HttpMethods.GET.name
 
                 if (isSuccess(responseCode)) {
-                    val file = File(filePath)
-                    FileOutputStream(file).use { fileOutputStream ->
-                        InputStreamReader(inputStream).use { inputStreamReader ->
-                            var byteRead: Int
-                            do {
-                                byteRead = inputStreamReader.read()
-                                if (byteRead != -1) {
-                                    fileOutputStream.write(byteRead)
-                                }
-                            } while (byteRead != -1)
-                        }
-                    }
+                    val file = readRemoteFile(fileName, inputStream)
 
                     HttpResponse(
                         status = responseCode,
@@ -163,12 +147,13 @@ class HttpClient {
 
     fun <T> postFile(
         url: String,
-        filePath: String,
+        file: File,
         responseClass: Class<T>,
         headers: Array<Pair<String, String>> = emptyArray()
     ): HttpResponse<T> {
         return runBlocking {
             val urlConnection = URL(url)
+            println(">>>>>> URL=> $url")
             with(urlConnection.openConnection() as HttpURLConnection) {
                 headers.forEach {
                     setRequestProperty(it.first, it.second)
@@ -177,25 +162,12 @@ class HttpClient {
                 doOutput = true
                 doInput = true
 
-                OutputStreamWriter(outputStream).use { outputStreamWriter ->
-                    FileInputStream(filePath).use { fileInputStream ->
-                        var byteRead: Int
-                        do {
-                            byteRead = fileInputStream.read()
-                            if (byteRead != -1) {
-                                outputStreamWriter.write(byteRead)
-                            }
-                        } while (byteRead != -1)
-                    }
-                    outputStreamWriter.flush()
-                }
+                writeRemoteFile(file, outputStream)
 
                 if (isSuccess(responseCode)) {
                     val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                    val responseBody = Gson().fromJson(
-                        inputStreamReader,
-                        responseClass
-                    )
+                    val responseBody = Gson().fromJson(inputStreamReader, responseClass)
+
                     HttpResponse(
                         status = responseCode,
                         message = responseMessage,
@@ -205,6 +177,42 @@ class HttpClient {
                     throw HttpException(responseCode, responseMessage)
                 }
             }
+        }
+    }
+
+    private fun readRemoteFile(fileName: String, inputStream: InputStream): File {
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            fileName
+        )
+        FileOutputStream(file).use { fileOutputStream ->
+            InputStreamReader(inputStream).use { inputStreamReader ->
+                var byteRead: Int
+                do {
+                    byteRead = inputStreamReader.read()
+                    if (byteRead != -1) {
+                        fileOutputStream.write(byteRead)
+                    }
+                } while (byteRead != -1)
+            }
+            fileOutputStream.flush()
+        }
+
+        return file
+    }
+
+    private fun writeRemoteFile(file: File, outputStream: OutputStream) {
+        OutputStreamWriter(outputStream).use { outputStreamWriter ->
+            FileInputStream(file).use { fileInputStream ->
+                var byteRead: Int
+                do {
+                    byteRead = fileInputStream.read()
+                    if (byteRead != -1) {
+                        outputStreamWriter.write(byteRead)
+                    }
+                } while (byteRead != -1)
+            }
+            outputStreamWriter.flush()
         }
     }
 

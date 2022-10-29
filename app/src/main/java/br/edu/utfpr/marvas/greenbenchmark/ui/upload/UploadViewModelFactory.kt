@@ -20,7 +20,7 @@ class UploadViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(UploadViewModel::class.java)) {
             val baseUrl = context.getString(R.string.base_url)
-            val path = context.getString(R.string.file_download_uri)
+            val path = context.getString(R.string.file_upload_uri)
             return UploadViewModel(
                 uploadRepository = UploadRepository(
                     CredentialStorage(

@@ -146,6 +146,16 @@ class AccountFragment : Fragment() {
             doSave()
         }
 
+        firstNameEditText.setText(R.string.first_name)
+        lastNameEditText.setText(R.string.last_name)
+        emailEditText.setText(R.string.email)
+        phoneNumberEditText.setText(R.string.phone_number)
+        phoneCountryCodeEditText.setText(R.string.phone_country_code)
+        accountActiveSwitch.isChecked = resources.getBoolean(R.bool.active)
+        notificationCheckBox.isChecked = resources.getBoolean(R.bool.notification)
+        usernameEditText.setText(R.string.username)
+        passwordEditText.setText(R.string.password)
+
         saveAccountButton.performClick()
     }
 

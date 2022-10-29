@@ -12,15 +12,14 @@ class DownloadRepository(
     private val credentialStorage: CredentialStorage,
     private val serverUrl: String
 ) {
-
-    suspend fun download(filePath: String): Result<DownloadFile> {
+    suspend fun download(fileName: String): Result<DownloadFile> {
         return withContext(Dispatchers.IO) {
             val token = credentialStorage.getToken()
             val client = HttpClient()
             try {
                 val response = client.getFile(
-                    serverUrl,
-                    filePath,
+                    "$serverUrl/$fileName",
+                    fileName,
                     HttpClient.createDefaultHeader(authorization = token.toString())
                 ).body!!
                 Log.d(Tags.DOWNLOAD_FILE, response.toString())
