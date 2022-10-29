@@ -40,10 +40,14 @@
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome "</string>
-    <string name="login_failed">"Login failed"</string>
 
+    <string name="login_failed">"Login failed"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_file">Not a valid file</string>
+    <string name="account_created_failed">"Account created failed"</string>
+    <string name="download_failed">"Download failed"</string>
+    <string name="upload_failed">"Upload failed"</string>
 
     <string name="invalid_first_name">First Name cannot be null</string>
     <string name="invalid_email">Not a valid email</string>

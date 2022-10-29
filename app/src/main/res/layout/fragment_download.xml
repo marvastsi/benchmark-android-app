@@ -12,7 +12,7 @@
         tools:context=".ui.download.DownloadFragment">
 
     <EditText
-        android:id="@+id/file_download"
+        android:id="@+id/file_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/file_download"
+        app:layout_constraintTop_toBottomOf="@+id/file_name"
         app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
@@ -56,8 +56,8 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/file_download"
-        app:layout_constraintStart_toStartOf="@+id/file_download"
+        app:layout_constraintEnd_toEndOf="@+id/file_name"
+        app:layout_constraintStart_toStartOf="@+id/file_name"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 

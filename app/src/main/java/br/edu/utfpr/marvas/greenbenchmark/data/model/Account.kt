@@ -1,12 +1,7 @@
 package br.edu.utfpr.marvas.greenbenchmark.data.model
 
-import java.util.*
-
-/**
- * Data class that captures user information for logged in users retrieved from LoginRepository
- */
 data class Account(
-    val id: String = UUID.randomUUID().toString(),
+    val id: String? = null,
     val firstName: String,
     val lastName: String,
     val email: String,

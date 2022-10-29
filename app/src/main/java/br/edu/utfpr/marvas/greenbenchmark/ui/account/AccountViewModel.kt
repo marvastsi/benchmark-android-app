@@ -27,10 +27,10 @@ class AccountViewModel(
                 is Result.Success ->
                     _createAccountResult.postValue(
                         CreateAccountResult(
-                            success = AccountCreatedView.fromAccount(result.data)
+                            success = result.data
                         )
                     )
-                else -> _createAccountResult.postValue(CreateAccountResult(error = R.string.login_failed))
+                else -> _createAccountResult.postValue(CreateAccountResult(error = R.string.account_created_failed))
             }
         }
     }
@@ -44,15 +44,15 @@ class AccountViewModel(
         password: String
     ) {
         if (firstName.isBlank()) {
-            _accountForm.value = AccountFormState(firstNameError = R.string.invalid_username)
+            _accountForm.value = AccountFormState(firstNameError = R.string.invalid_first_name)
         } else if (!isEmailValid(email)) {
-            _accountForm.value = AccountFormState(emailError = R.string.invalid_password)
+            _accountForm.value = AccountFormState(emailError = R.string.invalid_email)
         } else if (!isPhoneNumberValid(phoneNumber)) {
-            _accountForm.value = AccountFormState(phoneNumberError = R.string.invalid_password)
+            _accountForm.value = AccountFormState(phoneNumberError = R.string.invalid_phone_number)
         } else if (!isPhoneCountryCodeValid(phoneCountryCode)) {
-            _accountForm.value = AccountFormState(phoneCountryCodeError = R.string.invalid_password)
+            _accountForm.value = AccountFormState(phoneCountryCodeError = R.string.invalid_phone_country_code)
         } else if (!isUserNameValid(username)) {
-            _accountForm.value = AccountFormState(usernameError = R.string.invalid_password)
+            _accountForm.value = AccountFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
             _accountForm.value = AccountFormState(passwordError = R.string.invalid_password)
         } else {

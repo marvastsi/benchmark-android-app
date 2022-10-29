@@ -3,32 +3,31 @@ package br.edu.utfpr.marvas.greenbenchmark.data
 import android.util.Log
 import br.edu.utfpr.marvas.greenbenchmark.commons.CredentialStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Tags
-import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
+import br.edu.utfpr.marvas.greenbenchmark.data.model.UploadFile
 import br.edu.utfpr.marvas.greenbenchmark.http.HttpClient
-import br.edu.utfpr.marvas.greenbenchmark.ui.account.AccountCreatedView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class AccountRepository(
+class UploadRepository(
     private val credentialStorage: CredentialStorage,
     private val serverUrl: String
 ) {
 
-    suspend fun save(account: Account): Result<AccountCreatedView> {
+    suspend fun upload(filePath: String): Result<UploadFile> {
         return withContext(Dispatchers.IO) {
             val token = credentialStorage.getToken()
             val client = HttpClient()
             try {
-                val response = client.post(
+                val response = client.postFile(
                     serverUrl,
-                    account,
-                    AccountCreatedView::class.java,
+                    filePath,
+                    UploadFile::class.java,
                     HttpClient.createDefaultHeader(authorization = token.toString())
                 ).body!!
-                Log.d(Tags.ACCOUNT_FORM, response.toString())
+                Log.d(Tags.UPLOAD_FILE, response.toString())
                 Result.Success(response)
             } catch (ex: Exception) {
-                Log.e(Tags.ACCOUNT_FORM, "${ex.message}")
+                Log.e(Tags.UPLOAD_FILE, "${ex.message}")
                 Result.Error(ex)
             }
         }

@@ -33,6 +33,7 @@ class LoginRepository(
                 ).body!!
                 Log.d(Tags.LOGIN, token.toString())
                 credentialStorage.saveToken(token)
+                // Should obtain userId from token decoded
                 Result.Success(LoggedInUser(UUID.randomUUID().toString(), username))
             } catch (ex: Exception) {
                 Log.e(Tags.LOGIN, "${ex.message}")

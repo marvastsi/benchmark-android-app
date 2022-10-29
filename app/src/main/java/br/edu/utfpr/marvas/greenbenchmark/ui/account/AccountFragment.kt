@@ -150,7 +150,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun updateUiWithAccount(model: AccountCreatedView) {
-        val welcome = "Account created for " + model.displayName
+        val welcome = "Account created with id: " + model.accountId
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
     }

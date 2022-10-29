@@ -10,11 +10,6 @@ import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentMediaBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MediaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MediaFragment : Fragment() {
 
     private var _binding: FragmentMediaBinding? = null
@@ -48,5 +43,10 @@ class MediaFragment : Fragment() {
         println("Media Executed")
         Toast.makeText(requireContext(), "Media Executed", Toast.LENGTH_LONG).show()
         findNavController().navigate(R.id.action_MediaFragment_to_StartFragment)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -2,10 +2,7 @@ package br.edu.utfpr.marvas.greenbenchmark.http
 
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -129,7 +126,7 @@ class HttpClient {
         url: String,
         filePath: String,
         headers: Array<Pair<String, String>> = emptyArray()
-    ): HttpResponse<String> {
+    ): HttpResponse<File> {
         return runBlocking {
             val urlConnection = URL(url)
             with(urlConnection.openConnection() as HttpURLConnection) {
@@ -139,7 +136,8 @@ class HttpClient {
                 requestMethod = HttpMethods.GET.name
 
                 if (isSuccess(responseCode)) {
-                    FileOutputStream(filePath).use { fileOutputStream ->
+                    val file = File(filePath)
+                    FileOutputStream(file).use { fileOutputStream ->
                         InputStreamReader(inputStream).use { inputStreamReader ->
                             var byteRead: Int
                             do {
@@ -154,7 +152,7 @@ class HttpClient {
                     HttpResponse(
                         status = responseCode,
                         message = responseMessage,
-                        body = responseMessage
+                        body = file
                     )
                 } else {
                     throw HttpException(responseCode, responseMessage)
