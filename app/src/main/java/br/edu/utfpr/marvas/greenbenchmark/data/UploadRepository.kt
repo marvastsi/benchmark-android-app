@@ -28,7 +28,7 @@ class UploadRepository(
                 Log.d(Tags.UPLOAD_FILE, response.toString())
                 Result.Success(response)
             } catch (ex: Exception) {
-                Log.e(Tags.UPLOAD_FILE, "${ex.message}")
+                Log.e(Tags.UPLOAD_FILE, "${ex.message}", ex)
                 Result.Error(ex)
             }
         }

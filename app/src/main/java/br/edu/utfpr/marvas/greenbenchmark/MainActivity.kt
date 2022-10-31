@@ -15,7 +15,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import br.edu.utfpr.marvas.greenbenchmark.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding

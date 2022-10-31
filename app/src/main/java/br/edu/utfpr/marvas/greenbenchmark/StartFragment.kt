@@ -22,7 +22,7 @@ class StartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentStartBinding.inflate(inflater, container, false)
         return binding.root
@@ -41,12 +41,12 @@ class StartFragment : Fragment() {
             val route = testExecution.next()
             startButton.setOnClickListener {
                 val text = getString(R.string.test_execution_running)
-                startTextview.setText(text)
+                startTextview.text = text
                 findNavController().navigate(route)
             }
         } else {
             val text = getString(R.string.test_execution_finished)
-            startTextview.setText(text)
+            startTextview.text = text
             startButton.setOnClickListener {
                 Toast.makeText(
                     requireContext(),
