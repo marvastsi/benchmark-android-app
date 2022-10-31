@@ -1,0 +1,13 @@
+<resources>
+    <string name="account_id">111</string>
+    <string name="email">marvas@alunos.utfpr.edu.br</string>
+    <bool name="notification">false</bool>
+    <bool name="active">true</bool>
+    <string name="first_name">Marcelo</string>
+    <string name="last_name">Vasconcelos</string>
+    <string name="birthdate">1990–08–21</string>
+    <string name="username">greenbenchmark</string>
+    <string name="password">greenbenchmark</string>
+    <string name="phone_country_code">+55</string>
+    <string name="phone_number">44900880099</string>
+</resources>

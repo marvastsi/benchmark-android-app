@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_url">http://192.168.100.115:3000/api</string>
+    <string name="login_uri">/login</string>
+    <string name="account_uri">/accounts</string>
+    <string name="file_upload_uri">/files/upload</string>
+    <string name="file_to_upload">image-file.png</string>
+    <string name="file_download_uri">/files/download</string>
+    <string name="file_to_download">image-file.png</string>
+    <string name="test_load">20</string>
+</resources>
