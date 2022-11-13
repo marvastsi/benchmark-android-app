@@ -107,13 +107,13 @@ class LoginFragment : Fragment() {
 
         usernameEditText.setText(R.string.username)
         passwordEditText.setText(R.string.password)
-
         loginButton.performClick()
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome) + model.displayName
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
+        Thread.sleep(2000L)
         findNavController().navigate(R.id.action_LoginFragment_to_StartFragment)
     }
 

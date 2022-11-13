@@ -96,12 +96,12 @@ class DownloadFragment : Fragment() {
         }
 
         fileNameEditText.setText(R.string.file_to_download)
-
         downloadButton.performClick()
     }
 
     private fun updateUiWithFile(model: DownloadFileView) {
-        Toast.makeText(requireContext(), "Download Executed", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Download Executed: ${model.fileName()}", Toast.LENGTH_LONG).show()
+        Thread.sleep(2000L)
         findNavController().navigate(R.id.action_DownloadFragment_to_StartFragment)
     }
 

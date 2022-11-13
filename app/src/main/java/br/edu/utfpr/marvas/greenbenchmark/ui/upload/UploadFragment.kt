@@ -99,7 +99,6 @@ class UploadFragment : Fragment() {
         }
 
         fileNameEditText.setText(R.string.file_to_upload)
-
         uploadButton.performClick()
     }
 
@@ -107,12 +106,12 @@ class UploadFragment : Fragment() {
         return File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             fileName
-
         )
     }
 
     private fun updateUiWithFile(model: UploadFileView) {
         Toast.makeText(requireContext(), "Upload Executed", Toast.LENGTH_LONG).show()
+        Thread.sleep(2000L)
         findNavController().navigate(R.id.action_UploadFragment_to_StartFragment)
     }
 

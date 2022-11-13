@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/last_name" />
 
-    <EditText
+    <Spinner
         android:id="@+id/phone_country_code"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,8 +61,8 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_phone_country_code"
-        android:inputType="number"
         android:selectAllOnFocus="true"
+        android:entries="@array/country_codes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
@@ -75,7 +75,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_phone_number"
-        android:inputType="number"
+        android:inputType="phone|text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,10 +89,12 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
         android:text="@string/action_active"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_number" />
+        app:layout_constraintTop_toBottomOf="@+id/phone_number"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <CheckBox
         android:id="@+id/notification"
@@ -102,6 +104,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:text="@string/action_notification"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +117,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints="emailAddress,username"
         android:hint="@string/prompt_username"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"

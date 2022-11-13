@@ -193,7 +193,7 @@ class HttpClient {
             DataInputStream(inputStream).use { dataInputStream ->
                 var bytesAvailable = dataInputStream.available()
                 var bufferSize = bytesAvailable.coerceAtMost(MAX_BUFFER_SIZE)
-                var buffer = ByteArray(bufferSize)
+                val buffer = ByteArray(bufferSize)
                 var bytesRead = dataInputStream.read(buffer, 0, bufferSize)
                 while (bytesRead > 0) {
                     fileOutputStream.write(buffer, 0, bufferSize)
