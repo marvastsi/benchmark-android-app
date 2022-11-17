@@ -110,7 +110,7 @@ class UploadFragment : Fragment() {
     }
 
     private fun updateUiWithFile(model: UploadFileView) {
-        Toast.makeText(requireContext(), "Upload Executed", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Upload Executed: ${model.fileName()}", Toast.LENGTH_LONG).show()
         Thread.sleep(2000L)
         findNavController().navigate(R.id.action_UploadFragment_to_StartFragment)
     }
