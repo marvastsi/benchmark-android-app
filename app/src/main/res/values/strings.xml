@@ -1,16 +1,17 @@
 <resources>
     <string name="app_name">Green Benchmark</string>
     <string name="action_settings">Settings</string>
-    <string name="action_account">Account Form</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Green Benchmark</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="start">Start</string>
-    <string name="previous">Previous</string>
 
+    <string name="first_fragment_label">Green Benchmark</string>
+    <string name="start">Start</string>
     <string name="start_fragment">Click the button to Start</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- Strings used for fragments for account form -->
+
+    <string name="prompt_load_config">Number of Executions</string>
+    <string name="action_config">Save Config</string>
+    <string name="action_config_short">Save App Config</string>
+
+
+    <string name="action_account">Account Form</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_phone_country_code">Phone Country Code</string>
@@ -48,13 +49,19 @@
     <string name="account_created_failed">"Account created failed"</string>
     <string name="download_failed">"Download failed"</string>
     <string name="upload_failed">"Upload failed"</string>
+    <string name="config_failed">"Configuration failed"</string>
+    <string name="invalid_test_load">"Load must be >=10"</string>
+    <string name="invalid_media_uri">"Media file is required"</string>
+    <string name="invalid_upload_uri">"Upload file is required"</string>
 
     <string name="invalid_first_name">First Name cannot be null</string>
     <string name="invalid_email">Not a valid email</string>
     <string name="invalid_phone_number">Not a valid phone number</string>
-    <string name="invalid_phone_country_code">Not a valid country code</string>
+    <string name="invalid_phone_country_code">Select country code</string>
 
     <string name="test_execution_running">Test Execution is Running</string>
     <string name="test_execution_finished">Test Execution Finished!</string>
+    <string name="action_reconfigure">Reconfigure</string>
+    <string name="select_file">Select File</string>
 
 </resources>

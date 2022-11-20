@@ -1,6 +1,7 @@
 package br.edu.utfpr.marvas.greenbenchmark.commons
 
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import kotlin.random.Random
 
 typealias Scenario = Int
@@ -10,17 +11,15 @@ interface IExecution {
     fun next(): Scenario
     fun isRunning(): Boolean
     fun start()
+    fun stop()
 }
-
-data class Config(val testLoad: Int = Constants.DEFAULT_LOAD)
 
 /**
  * Use
- * @sample com.example.greenbenchmark.commons.TestExecution.getInstance
+ * @sample br.edu.utfpr.marvas.greenbenchmark.commons.TestExecution.getInstance
  */
 class TestExecution private constructor(private val config: Config) : IExecution {
-    var index: Int = 0
-        private set
+    private var index: Int = 0
     private var running: Boolean = false
     private val executions: List<Scenario> = generateExecutions(config.testLoad)
 
@@ -38,6 +37,11 @@ class TestExecution private constructor(private val config: Config) : IExecution
         running = true
     }
 
+    override fun stop() {
+        running = false
+        instance = null
+    }
+
     companion object {
         private val scenarios: Map<Int, Scenario> = mapOf(
             1 to R.id.action_StartFragment_to_LoginFragment,
@@ -49,14 +53,14 @@ class TestExecution private constructor(private val config: Config) : IExecution
 
         private var instance: IExecution? = null
 
-        fun getInstance(config: Config = Config()): IExecution {
+        fun getInstance(config: Config): IExecution {
             if (instance == null)
                 instance = TestExecution(config)
 
             return instance!!
         }
 
-        private fun generateExecutions(length: Int): List<Scenario> {
+        private fun generateExecutions(length: Long): List<Scenario> {
             val first = 1
             val last = 5
             val list = mutableListOf<Scenario>()

@@ -29,6 +29,7 @@ class UploadViewModelFactory(
                             Context.MODE_PRIVATE
                         )
                     ),
+                    context.contentResolver,
                     baseUrl.plus(path)
                 )
             ) as T

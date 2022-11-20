@@ -1,12 +1,14 @@
 package br.edu.utfpr.marvas.greenbenchmark.http
 
+import android.content.ContentResolver
+import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -14,7 +16,7 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-
+import java.net.URLDecoder
 
 class HttpClient {
     fun <T> get(
@@ -148,25 +150,27 @@ class HttpClient {
 
     fun <T> postFile(
         url: String,
-        file: File,
+        encodedPath: String,
+        contentResolver: ContentResolver,
         responseClass: Class<T>,
         headers: Array<Pair<String, String>> = emptyArray()
     ): HttpResponse<T> {
         return runBlocking {
+            val fileName = getFileName(encodedPath)
             val urlConnection = URL(url)
             with(urlConnection.openConnection() as HttpURLConnection) {
                 headers.forEach {
                     setRequestProperty(it.first, it.second)
                 }
                 setRequestProperty("Content-Type", "multipart/form-data;boundary=$BOUNDARY")
-                setRequestProperty("file", file.name)
+                setRequestProperty("file", fileName)
 
                 requestMethod = HttpMethods.POST.name
                 doOutput = true
                 doInput = true
                 useCaches = false
 
-                writeRemoteFile(file, outputStream)
+                writeRemoteFile(contentResolver, encodedPath.toUri(), fileName, outputStream)
 
                 if (isSuccess(responseCode)) {
                     val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
@@ -184,16 +188,26 @@ class HttpClient {
         }
     }
 
+    private fun getFileName(encodedPath: String): String {
+        val decoded = URLDecoder.decode(encodedPath, "UTF-8")
+        return decoded.toUri().lastPathSegment!!
+    }
+
     private fun readRemoteFile(fileName: String, inputStream: InputStream): File {
         val file = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
             fileName
         )
+        if (file.exists()) {
+            file.delete().also {
+                file.createNewFile()
+            }
+        }
         FileOutputStream(file).use { fileOutputStream ->
             DataInputStream(inputStream).use { dataInputStream ->
                 var bytesAvailable = dataInputStream.available()
                 var bufferSize = bytesAvailable.coerceAtMost(MAX_BUFFER_SIZE)
-                var buffer = ByteArray(bufferSize)
+                val buffer = ByteArray(bufferSize)
                 var bytesRead = dataInputStream.read(buffer, 0, bufferSize)
                 while (bytesRead > 0) {
                     fileOutputStream.write(buffer, 0, bufferSize)
@@ -208,16 +222,22 @@ class HttpClient {
         return file
     }
 
-    private fun writeRemoteFile(file: File, outputStream: OutputStream) {
+    private fun writeRemoteFile(
+        contentResolver: ContentResolver,
+        fileUri: Uri,
+        fileName: String,
+        outputStream: OutputStream
+    ) {
         DataOutputStream(outputStream).use { dataOutputStream ->
             dataOutputStream.writeBytes("$TWO_HYPHENS$BOUNDARY$LINE_END")
-            dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"${file.name}\"$LINE_END")
+            dataOutputStream.writeBytes(
+                "Content-Disposition: form-data; name=\"file\";filename=\"$fileName\"$LINE_END"
+            )
             dataOutputStream.writeBytes(LINE_END)
-
-            FileInputStream(file).use { fileInputStream ->
-                var bytesAvailable = fileInputStream.available()
+            contentResolver.openInputStream(fileUri).use { fileInputStream ->
+                var bytesAvailable = fileInputStream!!.available()
                 var bufferSize = bytesAvailable.coerceAtMost(MAX_BUFFER_SIZE)
-                var buffer = ByteArray(bufferSize)
+                val buffer = ByteArray(bufferSize)
                 var bytesRead = fileInputStream.read(buffer, 0, bufferSize)
                 while (bytesRead > 0) {
                     dataOutputStream.write(buffer, 0, bufferSize)
