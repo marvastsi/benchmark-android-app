@@ -1,25 +1,34 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.upload
 
+import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentUploadBinding
-import java.io.File
+import java.net.URLDecoder
 
-class UploadFragment : Fragment() {
+class UploadFragment : Fragment(), TextWatcher {
+    private lateinit var configRepository: ConfigRepository
     private lateinit var uploadViewModel: UploadViewModel
+    private lateinit var fileNameEditText: EditText
+    private lateinit var uploadButton: Button
+    private lateinit var loadingProgressBar: ProgressBar
     private var _binding: FragmentUploadBinding? = null
     private val binding get() = _binding!!
 
@@ -29,88 +38,87 @@ class UploadFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUploadBinding.inflate(inflater, container, false)
+        val configStorage = ConfigStorage(
+            requireContext().getSharedPreferences(
+                ConfigStorage.TEST_CONFIG,
+                Context.MODE_PRIVATE
+            )
+        )
+        configRepository = ConfigRepository(configStorage)
+        uploadViewModel = ViewModelProvider(
+            this,
+            UploadViewModelFactory(requireContext())
+        )[UploadViewModel::class.java]
+
+        fileNameEditText = binding.fileUpload
+        uploadButton = binding.executeUpload
+        loadingProgressBar = binding.loading
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        uploadViewModel = ViewModelProvider(
-            this,
-            UploadViewModelFactory(requireContext())
-        )[UploadViewModel::class.java]
+        uploadViewModel.uploadFormState.observe(
+            viewLifecycleOwner,
+            createFormStateObserver()
+        )
 
-        val fileNameEditText = binding.fileUpload
-        val uploadButton = binding.executeUpload
-        val loadingProgressBar = binding.loading
+        uploadViewModel.uploadResult.observe(
+            viewLifecycleOwner,
+            createResultObserver()
+        )
 
-        uploadViewModel.uploadFormState.observe(viewLifecycleOwner,
-            Observer { formState ->
-                if (formState == null) {
-                    return@Observer
-                }
-                uploadButton.isEnabled = formState.isDataValid
-                formState.fileNameError?.let {
-                    fileNameEditText.error = getString(it)
-                }
-            })
-
-        uploadViewModel.uploadResult.observe(viewLifecycleOwner,
-            Observer { result ->
-                result ?: return@Observer
-                loadingProgressBar.visibility = View.GONE
-                result.error?.let {
-                    showUploadFailed(it)
-                }
-                result.success?.let {
-                    updateUiWithFile(it)
-                }
-                println("Upload Executed")
-            })
-
-        val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // ignore
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // ignore
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                uploadViewModel.uploadDataChanged(
-                    fileNameEditText.text.toString()
-                )
-            }
-        }
-        fileNameEditText.addTextChangedListener(afterTextChangedListener)
-        fileNameEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val fileName: String = fileNameEditText.text.toString()
-                uploadViewModel.upload(getFile(fileName))
-            }
-            false
-        }
+        fileNameEditText.addTextChangedListener(this)
 
         uploadButton.setOnClickListener {
-            loadingProgressBar.visibility = View.VISIBLE
-            val fileName: String = fileNameEditText.text.toString()
-            uploadViewModel.upload(getFile(fileName))
+            executeUpload()
         }
 
-        fileNameEditText.setText(R.string.file_to_upload)
+        val config = configRepository.getConfig()
+        fileNameEditText.setText(config.uploadUri)
+
         uploadButton.performClick()
     }
 
-    private fun getFile(fileName: String): File {
-        return File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            fileName
-        )
+    private fun executeUpload() {
+        loadingProgressBar.visibility = View.VISIBLE
+        val filePath: String = fileNameEditText.text.toString()
+        uploadViewModel.upload(filePath)
+    }
+
+    private fun createFormStateObserver(): Observer<in UploadFormState> {
+        return Observer { formState ->
+            if (formState == null) {
+                return@Observer
+            }
+            uploadButton.isEnabled = formState.isDataValid
+            formState.fileNameError?.let {
+                fileNameEditText.error = getString(it)
+            }
+        }
+    }
+
+    private fun createResultObserver(): Observer<in UploadFileResult> {
+        return Observer { uploadResult ->
+            uploadResult ?: return@Observer
+            loadingProgressBar.visibility = View.GONE
+            uploadResult.error?.let {
+                showUploadFailed(it)
+            }
+            uploadResult.success?.let {
+                updateUiWithFile(it)
+            }
+            println("Upload Executed")
+        }
     }
 
     private fun updateUiWithFile(model: UploadFileView) {
-        Toast.makeText(requireContext(), "Upload Executed: ${model.fileName()}", Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            requireContext(),
+            "Upload Executed: ${model.fileName()}",
+            Toast.LENGTH_LONG
+        ).show()
         Thread.sleep(2000L)
         findNavController().navigate(R.id.action_UploadFragment_to_StartFragment)
     }
@@ -118,6 +126,16 @@ class UploadFragment : Fragment() {
     private fun showUploadFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_UploadFragment_to_StartFragment)
+    }
+
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable) {
+        uploadViewModel.uploadDataChanged(
+            fileNameEditText.text.toString()
+        )
     }
 
     override fun onDestroyView() {

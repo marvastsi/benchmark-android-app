@@ -7,13 +7,8 @@ class CredentialStorage(
 ) {
 
     fun saveToken(token: Token) {
-        //sharedPreferences
-        //        .edit()
-        //        .put(API_TOKEN, token.value)
-        //        .commit()
         with(sharedPreferences.edit()) {
             putString(API_TOKEN, token.value)
-            remove(API_TOKEN)
             apply()
         }
     }

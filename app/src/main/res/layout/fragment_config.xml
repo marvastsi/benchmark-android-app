@@ -16,19 +16,79 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_load_config"
-        android:imeActionLabel="@string/action_config_short"
-        android:imeOptions="actionDone"
         android:inputType="number"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/media_uri"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="78dp"
+        android:hint="@string/prompt_media"
+        android:inputType="textUri"
+        android:selectAllOnFocus="true"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test_load" />
+
     <Button
-        android:id="@+id/load_config"
+        android:id="@+id/choose_media"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:enabled="true"
+        app:icon="@android:drawable/sym_contact_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test_load" />
+
+
+    <EditText
+        android:id="@+id/upload_uri"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="78dp"
+        android:hint="@string/prompt_upload"
+        android:inputType="textUri"
+        android:selectAllOnFocus="true"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/media_uri" />
+
+
+    <Button
+        android:id="@+id/choose_upload"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:enabled="true"
+        app:icon="@android:drawable/sym_contact_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/media_uri" />
+
+    <Button
+        android:id="@+id/save_config"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -42,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/test_load"
+        app:layout_constraintTop_toBottomOf="@+id/upload_uri"
         app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar

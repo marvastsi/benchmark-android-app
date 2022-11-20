@@ -8,10 +8,6 @@ import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.CredentialStorage
 import br.edu.utfpr.marvas.greenbenchmark.data.AccountRepository
 
-/**
- * ViewModel provider factory to instantiate AccountViewModel.
- * Required given AccountViewModel has a non-empty constructor
- */
 class AccountViewModelFactory(
     private val context: Context
 ) : ViewModelProvider.Factory {

@@ -19,8 +19,7 @@ interface IExecution {
  * @sample br.edu.utfpr.marvas.greenbenchmark.commons.TestExecution.getInstance
  */
 class TestExecution private constructor(private val config: Config) : IExecution {
-    var index: Int = 0
-        private set
+    private var index: Int = 0
     private var running: Boolean = false
     private val executions: List<Scenario> = generateExecutions(config.testLoad)
 
@@ -54,7 +53,7 @@ class TestExecution private constructor(private val config: Config) : IExecution
 
         private var instance: IExecution? = null
 
-        fun getInstance(config: Config = Config()): IExecution {
+        fun getInstance(config: Config): IExecution {
             if (instance == null)
                 instance = TestExecution(config)
 

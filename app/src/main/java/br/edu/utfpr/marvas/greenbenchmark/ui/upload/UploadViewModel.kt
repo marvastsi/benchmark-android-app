@@ -1,5 +1,6 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.upload
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,9 +21,9 @@ class UploadViewModel(
     private val _uploadFileResult = MutableLiveData<UploadFileResult>()
     val uploadResult: LiveData<UploadFileResult> = _uploadFileResult
 
-    fun upload(file: File) {
+    fun upload(filePath: String) {
         viewModelScope.launch {
-            when (val result = uploadRepository.upload(file)) {
+            when (val result = uploadRepository.upload(filePath)) {
                 is Result.Success ->
                     _uploadFileResult.postValue(
                         UploadFileResult(

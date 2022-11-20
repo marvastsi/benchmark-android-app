@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
@@ -16,8 +19,12 @@ import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentLoginBinding
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), TextWatcher {
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var loginButton: Button
+    private lateinit var loadingProgressBar: ProgressBar
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -27,87 +34,84 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         loginViewModel = ViewModelProvider(
             this,
             LoginViewModelFactory(requireContext())
         )[LoginViewModel::class.java]
 
-        val usernameEditText = binding.username
-        val passwordEditText = binding.password
-        val loginButton = binding.login
-        val loadingProgressBar = binding.loading
+        usernameEditText = binding.username
+        passwordEditText = binding.password
+        loginButton = binding.login
+        loadingProgressBar = binding.loading
+        return binding.root
+    }
 
-        loginViewModel.loginFormState.observe(viewLifecycleOwner,
-            Observer { loginFormState ->
-                if (loginFormState == null) {
-                    return@Observer
-                }
-                loginButton.isEnabled = loginFormState.isDataValid
-                loginFormState.usernameError?.let {
-                    usernameEditText.error = getString(it)
-                }
-                loginFormState.passwordError?.let {
-                    passwordEditText.error = getString(it)
-                }
-            })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
-                loadingProgressBar.visibility = View.GONE
-                loginResult.error?.let {
-                    showLoginFailed(it)
-                }
-                loginResult.success?.let {
-                    updateUiWithUser(it)
-                }
-                println("Login Executed")
-            })
+        loginViewModel.loginFormState.observe(
+            viewLifecycleOwner,
+            createFormStateObserver()
+        )
 
-        val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // ignore
-            }
+        loginViewModel.loginResult.observe(
+            viewLifecycleOwner,
+            createResultObserver()
+        )
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // ignore
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                loginViewModel.loginDataChanged(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
-            }
-        }
-        usernameEditText.addTextChangedListener(afterTextChangedListener)
-        passwordEditText.addTextChangedListener(afterTextChangedListener)
+        usernameEditText.addTextChangedListener(this)
+        passwordEditText.addTextChangedListener(this)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
+                executeLogin()
             }
-            false
+            true
         }
 
         loginButton.setOnClickListener {
-            loadingProgressBar.visibility = View.VISIBLE
-            loginViewModel.login(
-                usernameEditText.text.toString(),
-                passwordEditText.text.toString()
-            )
+            executeLogin()
         }
 
         usernameEditText.setText(R.string.username)
         passwordEditText.setText(R.string.password)
         loginButton.performClick()
+    }
+
+    private fun executeLogin() {
+        loadingProgressBar.visibility = View.VISIBLE
+        loginViewModel.login(
+            usernameEditText.text.toString(),
+            passwordEditText.text.toString()
+        )
+    }
+
+    private fun createFormStateObserver(): Observer<in LoginFormState> {
+        return Observer { loginFormState ->
+            if (loginFormState == null) {
+                return@Observer
+            }
+            loginButton.isEnabled = loginFormState.isDataValid
+            loginFormState.usernameError?.let {
+                usernameEditText.error = getString(it)
+            }
+            loginFormState.passwordError?.let {
+                passwordEditText.error = getString(it)
+            }
+        }
+    }
+
+    private fun createResultObserver(): Observer<in LoginResult> {
+        return Observer { loginResult ->
+            loginResult ?: return@Observer
+            loadingProgressBar.visibility = View.GONE
+            loginResult.error?.let {
+                showLoginFailed(it)
+            }
+            loginResult.success?.let {
+                updateUiWithUser(it)
+            }
+            println("Login Executed")
+        }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
@@ -120,6 +124,17 @@ class LoginFragment : Fragment() {
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_LoginFragment_to_StartFragment)
+    }
+
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable) {
+        loginViewModel.loginDataChanged(
+            usernameEditText.text.toString(),
+            passwordEditText.text.toString()
+        )
     }
 
     override fun onDestroyView() {

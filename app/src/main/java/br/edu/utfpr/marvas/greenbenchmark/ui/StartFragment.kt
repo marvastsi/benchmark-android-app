@@ -1,5 +1,6 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.commons.TestExecution
+import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentStartBinding
 
 class StartFragment : Fragment() {
+    private lateinit var configRepository: ConfigRepository
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
 
@@ -22,16 +26,20 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStartBinding.inflate(inflater, container, false)
+        val configStorage = ConfigStorage(requireContext().getSharedPreferences(
+            ConfigStorage.TEST_CONFIG,
+            Context.MODE_PRIVATE
+        ))
+        configRepository = ConfigRepository(configStorage)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val startButton = binding.buttonStart
         val startTextview = binding.textviewStart
-
-        val testLoad = arguments?.getLong(Constants.LOAD_PARAM, Constants.DEFAULT_LOAD)
-        val config = testLoad?.let { Config(it) } ?: Config()
+        val config = configRepository.getConfig()
 
         val testExecution = TestExecution.getInstance(config)
 

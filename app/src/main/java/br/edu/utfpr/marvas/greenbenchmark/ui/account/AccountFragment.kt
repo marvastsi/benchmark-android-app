@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -32,7 +31,7 @@ import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentAccountBinding
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
-class AccountFragment : Fragment() {
+class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListener {
     private lateinit var accountViewModel: AccountViewModel
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
@@ -88,19 +87,6 @@ class AccountFragment : Fragment() {
             createResultObserver()
         )
 
-        val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable) = run { doValidate() }
-        }
-        val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) = run { doValidate() }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
         createArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
@@ -110,32 +96,19 @@ class AccountFragment : Fragment() {
             phoneCountryCodeSpinner.adapter = adapter
         }
 
-        firstNameEditText.addTextChangedListener(afterTextChangedListener)
-        emailEditText.addTextChangedListener(afterTextChangedListener)
-        phoneNumberEditText.addTextChangedListener(afterTextChangedListener)
-        phoneCountryCodeSpinner.onItemSelectedListener = onItemSelectedListener
-        usernameEditText.addTextChangedListener(afterTextChangedListener)
-        passwordEditText.addTextChangedListener(afterTextChangedListener)
-
-        passwordEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                doSave()
-            }
-            false
-        }
+        firstNameEditText.addTextChangedListener(this)
+        emailEditText.addTextChangedListener(this)
+        phoneNumberEditText.addTextChangedListener(this)
+        phoneCountryCodeSpinner.onItemSelectedListener = this
+        usernameEditText.addTextChangedListener(this)
+        passwordEditText.addTextChangedListener(this)
 
         saveAccountButton.setOnClickListener {
-            loadingProgressBar.visibility = View.VISIBLE
             doSave()
         }
 
         fillValues()
         saveAccountButton.performClick()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun fillValues() {
@@ -151,6 +124,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun doValidate() {
+        loadingProgressBar.visibility = View.VISIBLE
         accountViewModel.accountDataChanged(
             firstNameEditText.text.toString(),
             emailEditText.text.toString(),
@@ -162,6 +136,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun doSave() {
+        loadingProgressBar.visibility = View.VISIBLE
         accountViewModel.save(
             Account(
                 firstName = firstNameEditText.text.toString(),
@@ -177,21 +152,10 @@ class AccountFragment : Fragment() {
         )
     }
 
-    private fun updateUiWithAccount(model: AccountCreatedView) {
-        val welcome = "Account created with id: " + model.accountId
-        Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
-        Thread.sleep(2000L)
-        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
-    }
-
-    private fun showAccountCreateFailed(@StringRes errorString: Int) {
-        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
-    }
-
     private fun createFormStateObserver(): Observer<in AccountFormState> {
         return Observer { accountFormState ->
             accountFormState ?: return@Observer
+            loadingProgressBar.visibility = View.GONE
             saveAccountButton.isEnabled = accountFormState.isDataValid
             accountFormState.firstNameError?.let {
                 firstNameEditText.error = getString(it)
@@ -229,6 +193,18 @@ class AccountFragment : Fragment() {
         }
     }
 
+    private fun updateUiWithAccount(model: AccountCreatedView) {
+        val welcome = "Account created with id: " + model.accountId
+        Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
+        Thread.sleep(2000L)
+        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
+    }
+
+    private fun showAccountCreateFailed(@StringRes errorString: Int) {
+        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
+    }
+
     private fun createArrayAdapter(
         context: Context,
         @LayoutRes textViewResId: Int,
@@ -256,5 +232,21 @@ class AccountFragment : Fragment() {
             }
             return view
         }
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable?) = run { doValidate() }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
+        run { doValidate() }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

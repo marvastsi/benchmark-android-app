@@ -1,5 +1,6 @@
 package br.edu.utfpr.marvas.greenbenchmark.data
 
+import android.content.ContentResolver
 import android.util.Log
 import br.edu.utfpr.marvas.greenbenchmark.commons.CredentialStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Tags
@@ -7,21 +8,22 @@ import br.edu.utfpr.marvas.greenbenchmark.data.model.UploadFile
 import br.edu.utfpr.marvas.greenbenchmark.http.HttpClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class UploadRepository(
     private val credentialStorage: CredentialStorage,
+    private val contentResolver: ContentResolver,
     private val serverUrl: String
 ) {
 
-    suspend fun upload(file: File): Result<UploadFile> {
+    suspend fun upload(filePath: String): Result<UploadFile> {
         return withContext(Dispatchers.IO) {
             val token = credentialStorage.getToken()
             val client = HttpClient()
             try {
                 val response = client.postFile(
                     serverUrl,
-                    file,
+                    filePath,
+                    contentResolver,
                     UploadFile::class.java,
                     HttpClient.createDefaultHeader(authorization = token.toString())
                 ).body!!

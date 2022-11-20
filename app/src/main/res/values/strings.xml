@@ -7,8 +7,8 @@
     <string name="start_fragment">Click the button to Start</string>
 
     <string name="prompt_load_config">Number of Executions</string>
-    <string name="action_config">Load Config</string>
-    <string name="action_config_short">Set Load Config</string>
+    <string name="action_config">Save Config</string>
+    <string name="action_config_short">Save App Config</string>
 
 
     <string name="action_account">Account Form</string>
@@ -50,7 +50,9 @@
     <string name="download_failed">"Download failed"</string>
     <string name="upload_failed">"Upload failed"</string>
     <string name="config_failed">"Configuration failed"</string>
-    <string name="invalid_config">"Load must be >=10"</string>
+    <string name="invalid_test_load">"Load must be >=10"</string>
+    <string name="invalid_media_uri">"Media file is required"</string>
+    <string name="invalid_upload_uri">"Upload file is required"</string>
 
     <string name="invalid_first_name">First Name cannot be null</string>
     <string name="invalid_email">Not a valid email</string>
@@ -60,5 +62,6 @@
     <string name="test_execution_running">Test Execution is Running</string>
     <string name="test_execution_finished">Test Execution Finished!</string>
     <string name="action_reconfigure">Reconfigure</string>
+    <string name="select_file">Select File</string>
 
 </resources>
