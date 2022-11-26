@@ -27,11 +27,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
+import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentAccountBinding
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListener {
+    private lateinit var configRepository: ConfigRepository
     private lateinit var accountViewModel: AccountViewModel
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
@@ -44,6 +48,7 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
     private lateinit var passwordEditText: EditText
     private lateinit var saveAccountButton: Button
     private lateinit var loadingProgressBar: ProgressBar
+    private lateinit var config: Config
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
 
@@ -53,6 +58,18 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
+
+        val sharedPreferences = requireContext().getSharedPreferences(
+            ConfigStorage.TEST_CONFIG,
+            Context.MODE_PRIVATE
+        )
+        val configStorage = ConfigStorage(sharedPreferences)
+        configRepository = ConfigRepository(configStorage)
+        config = configRepository.getConfig()
+        accountViewModel = ViewModelProvider(
+            this,
+            AccountViewModelFactory(requireContext(), config)
+        )[AccountViewModel::class.java]
 
         firstNameEditText = binding.firstName
         lastNameEditText = binding.lastName
@@ -65,11 +82,6 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
         passwordEditText = binding.password
         saveAccountButton = binding.saveAccount
         loadingProgressBar = binding.loading
-
-        accountViewModel = ViewModelProvider(
-            this,
-            AccountViewModelFactory(requireContext())
-        )[AccountViewModel::class.java]
 
         return binding.root
     }

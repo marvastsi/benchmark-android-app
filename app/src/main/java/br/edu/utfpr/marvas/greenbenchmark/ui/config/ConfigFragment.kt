@@ -26,6 +26,8 @@ class ConfigFragment : Fragment(), TextWatcher {
     private lateinit var tvTestLoad: EditText
     private lateinit var tvMediaFile: EditText
     private lateinit var tvUploadFile: EditText
+    private lateinit var tvDownloadFile: EditText
+    private lateinit var tvServerUrl: EditText
     private lateinit var btnSaveConfig: Button
     private lateinit var btnChooseMedia: Button
     private lateinit var btnChooseUpload: Button
@@ -48,6 +50,8 @@ class ConfigFragment : Fragment(), TextWatcher {
         tvTestLoad = binding.testLoad
         tvMediaFile = binding.mediaUri
         tvUploadFile = binding.uploadUri
+        tvDownloadFile = binding.downloadUri
+        tvServerUrl = binding.serverUrl
         btnSaveConfig = binding.saveConfig
         btnChooseMedia = binding.chooseMedia
         btnChooseUpload = binding.chooseUpload
@@ -72,6 +76,8 @@ class ConfigFragment : Fragment(), TextWatcher {
         tvTestLoad.addTextChangedListener(this)
         tvMediaFile.addTextChangedListener(this)
         tvUploadFile.addTextChangedListener(this)
+        tvDownloadFile.addTextChangedListener(this)
+        tvServerUrl.addTextChangedListener(this)
 
         btnChooseMedia.setOnClickListener {
             getMediaContent.launch("video/*")
@@ -84,7 +90,9 @@ class ConfigFragment : Fragment(), TextWatcher {
             val config = Config(
                 tvTestLoad.text.toString().toLong(),
                 mediaUri,
-                uploadUri
+                uploadUri,
+                tvDownloadFile.text.toString(),
+                tvServerUrl.text.toString()
             )
             configViewModel.saveConfig(config)
         }
@@ -105,6 +113,12 @@ class ConfigFragment : Fragment(), TextWatcher {
             configFormState.uploadUriError?.let {
                 tvUploadFile.error = getString(it)
             }
+            configFormState.downloadUriError?.let {
+                tvDownloadFile.error = getString(it)
+            }
+            configFormState.serverUrlError?.let {
+                tvServerUrl.error = getString(it)
+            }
         }
     }
 
@@ -123,7 +137,7 @@ class ConfigFragment : Fragment(), TextWatcher {
 
     private fun updateUiWithConfig(model: ConfigView) {
         println("Test Configuration Loaded")
-        Toast.makeText(requireContext(), "Config loaded", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Config loaded: ${model.serverUrl}", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_ConfigFragment_to_StartFragment)
     }
 
@@ -151,7 +165,9 @@ class ConfigFragment : Fragment(), TextWatcher {
         configViewModel.configDataChanged(
             tvTestLoad.text.toString(),
             tvMediaFile.text.toString(),
-            tvUploadFile.text.toString()
+            tvUploadFile.text.toString(),
+            tvDownloadFile.text.toString(),
+            tvServerUrl.text.toString()
         )
     }
 

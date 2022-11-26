@@ -9,7 +9,7 @@
     <string name="prompt_load_config">Number of Executions</string>
     <string name="action_config">Save Config</string>
     <string name="action_config_short">Save App Config</string>
-
+    <string name="prompt_server_url">Server url</string>
 
     <string name="action_account">Account Form</string>
     <string name="prompt_first_name">First Name</string>
@@ -53,6 +53,8 @@
     <string name="invalid_test_load">"Load must be >=10"</string>
     <string name="invalid_media_uri">"Media file is required"</string>
     <string name="invalid_upload_uri">"Upload file is required"</string>
+    <string name="invalid_download_uri">"Download file is required"</string>
+    <string name="invalid_server_url">"Server URL is required"</string>
 
     <string name="invalid_first_name">First Name cannot be null</string>
     <string name="invalid_email">Not a valid email</string>
