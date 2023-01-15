@@ -1,5 +1,7 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.config
 
+import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -7,11 +9,17 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ArrayRes
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,13 +29,14 @@ import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentConfigBinding
 
-class ConfigFragment : Fragment(), TextWatcher {
+class ConfigFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListener {
     private lateinit var configViewModel: ConfigViewModel
     private lateinit var tvTestLoad: EditText
     private lateinit var tvMediaFile: EditText
     private lateinit var tvUploadFile: EditText
     private lateinit var tvDownloadFile: EditText
     private lateinit var tvServerUrl: EditText
+    private lateinit var specificScenarioSpinner: Spinner
     private lateinit var btnSaveConfig: Button
     private lateinit var btnChooseMedia: Button
     private lateinit var btnChooseUpload: Button
@@ -52,6 +61,7 @@ class ConfigFragment : Fragment(), TextWatcher {
         tvUploadFile = binding.uploadUri
         tvDownloadFile = binding.downloadUri
         tvServerUrl = binding.serverUrl
+        specificScenarioSpinner = binding.specificScenario
         btnSaveConfig = binding.saveConfig
         btnChooseMedia = binding.chooseMedia
         btnChooseUpload = binding.chooseUpload
@@ -73,11 +83,21 @@ class ConfigFragment : Fragment(), TextWatcher {
             createResultObserver()
         )
 
+        createArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            R.array.scenarios
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            specificScenarioSpinner.adapter = adapter
+        }
+
         tvTestLoad.addTextChangedListener(this)
         tvMediaFile.addTextChangedListener(this)
         tvUploadFile.addTextChangedListener(this)
         tvDownloadFile.addTextChangedListener(this)
         tvServerUrl.addTextChangedListener(this)
+        specificScenarioSpinner.onItemSelectedListener = this
 
         btnChooseMedia.setOnClickListener {
             getMediaContent.launch("video/*")
@@ -87,15 +107,21 @@ class ConfigFragment : Fragment(), TextWatcher {
         }
 
         btnSaveConfig.setOnClickListener {
-            val config = Config(
-                tvTestLoad.text.toString().toLong(),
-                mediaUri,
-                uploadUri,
-                tvDownloadFile.text.toString(),
-                tvServerUrl.text.toString()
-            )
-            configViewModel.saveConfig(config)
+            doSave()
         }
+    }
+
+    private fun doSave() {
+        loadingProgressBar.visibility = View.VISIBLE
+        val config = Config(
+            tvTestLoad.text.toString().toLong(),
+            mediaUri,
+            uploadUri,
+            tvDownloadFile.text.toString(),
+            tvServerUrl.text.toString(),
+            specificScenarioSpinner.selectedItemPosition
+        )
+        configViewModel.saveConfig(config)
     }
 
     private fun createFormStateObserver(): Observer<in ConfigFormState> {
@@ -137,12 +163,42 @@ class ConfigFragment : Fragment(), TextWatcher {
 
     private fun updateUiWithConfig(model: ConfigView) {
         println("Test Configuration Loaded")
-        Toast.makeText(requireContext(), "Config loaded: ${model.serverUrl}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Config loaded: ${model.serverUrl}", Toast.LENGTH_SHORT)
+            .show()
         findNavController().navigate(R.id.action_ConfigFragment_to_StartFragment)
     }
 
     private fun showConfigFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun createArrayAdapter(
+        context: Context,
+        @LayoutRes textViewResId: Int,
+        @ArrayRes textArrayResId: Int
+    ) = object : ArrayAdapter<String>(
+        context,
+        textViewResId,
+        resources.getStringArray(textArrayResId)
+    ) {
+        override fun isEnabled(position: Int): Boolean {
+            return position != 0
+        }
+
+        override fun getDropDownView(
+            position: Int,
+            convertView: View?,
+            parent: ViewGroup
+        ): View {
+            val view = super.getDropDownView(position, convertView, parent)
+            val textView = view as TextView
+            if (position == 0) {
+                textView.setTextColor(Color.GRAY)
+            } else {
+                textView.setTextColor(Color.BLACK)
+            }
+            return view
+        }
     }
 
     private val getMediaContent =
@@ -157,22 +213,32 @@ class ConfigFragment : Fragment(), TextWatcher {
             tvUploadFile.setText(uri?.lastPathSegment)
         }
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-    override fun afterTextChanged(s: Editable?) {
+    private fun doValidate() {
         configViewModel.configDataChanged(
             tvTestLoad.text.toString(),
             tvMediaFile.text.toString(),
             tvUploadFile.text.toString(),
             tvDownloadFile.text.toString(),
-            tvServerUrl.text.toString()
+            tvServerUrl.text.toString(),
+            specificScenarioSpinner.selectedItem.toString()
         )
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable?) {
+        doValidate()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
+        run { doValidate() }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 }

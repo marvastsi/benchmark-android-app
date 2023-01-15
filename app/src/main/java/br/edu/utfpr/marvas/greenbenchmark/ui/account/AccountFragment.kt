@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
@@ -208,7 +209,7 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
     private fun updateUiWithAccount(model: AccountCreatedView) {
         val welcome = "Account created with id: " + model.accountId
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
-        Thread.sleep(2000L)
+        Thread.sleep(Constants.DELAY_MS_MEDIUM)
         findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
     }
 

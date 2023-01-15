@@ -21,7 +21,7 @@ interface IExecution {
 class TestExecution private constructor(private val config: Config) : IExecution {
     private var index: Int = 0
     private var running: Boolean = false
-    private val executions: List<Scenario> = generateExecutions(config.testLoad)
+    private val executions: List<Scenario> = generateExecutions(config)
 
     override fun hasNext(): Boolean {
         return index < config.testLoad
@@ -60,7 +60,18 @@ class TestExecution private constructor(private val config: Config) : IExecution
             return instance!!
         }
 
-        private fun generateExecutions(length: Long): List<Scenario> {
+        private fun generateExecutions(config: Config): List<Scenario> {
+            return if (config.specificScenario > 0) {
+                val list = mutableListOf<Scenario>()
+                for (i in 1..config.testLoad) {
+                    scenarios[config.specificScenario]?.let { list.add(it) }
+                }
+                list
+            } else
+                randomList(config.testLoad)
+        }
+
+        private fun randomList(length: Long): List<Scenario> {
             val first = 1
             val last = 5
             val list = mutableListOf<Scenario>()

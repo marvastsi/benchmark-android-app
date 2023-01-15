@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.commons.Tags
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentMediaBinding
@@ -81,7 +82,7 @@ class MediaFragment : Fragment() {
     private fun exitMediaPlayer() {
         println("Media Executed")
         Toast.makeText(requireContext(), "Media Executed", Toast.LENGTH_LONG).show()
-        Thread.sleep(2000L)
+        Thread.sleep(Constants.DELAY_MS_SHORT)
         findNavController().navigate(R.id.action_MediaFragment_to_StartFragment)
     }
 
