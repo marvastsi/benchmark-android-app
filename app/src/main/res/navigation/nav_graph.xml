@@ -61,7 +61,7 @@
     <fragment
         android:id="@+id/AccountFragment"
         android:name="br.edu.utfpr.marvas.greenbenchmark.ui.account.AccountFragment"
-        android:label="@string/action_sign_in"
+        android:label="@string/action_account"
         tools:layout="@layout/fragment_account">
 
         <action

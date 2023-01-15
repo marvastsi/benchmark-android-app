@@ -14,6 +14,7 @@ class ConfigStorage(
             putLong(LOAD_PARAM, config.testLoad)
             putString(DOWNLOAD_URI_PARAM, config.downloadUri)
             putString(SERVER_URL_PARAM, config.serverUrl)
+            putInt(SPECIFIC_SCENARIO, config.specificScenario)
             apply()
         }
     }
@@ -26,6 +27,7 @@ class ConfigStorage(
             uploadUri = prefs[UPLOAD_URI_PARAM] as String,
             downloadUri = prefs[DOWNLOAD_URI_PARAM] as String,
             serverUrl = prefs[SERVER_URL_PARAM] as String,
+            specificScenario = prefs[SPECIFIC_SCENARIO] as Int
         )
     }
 
@@ -35,6 +37,7 @@ class ConfigStorage(
         const val UPLOAD_URI_PARAM = "uploadUri"
         const val DOWNLOAD_URI_PARAM = "downloadUri"
         const val SERVER_URL_PARAM = "serverUrl"
+        const val SPECIFIC_SCENARIO = "specificScenario"
         const val LOAD_PARAM = "loadConfig"
     }
 }

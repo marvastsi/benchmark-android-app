@@ -36,7 +36,8 @@ class ConfigViewModel(private val configRepository: ConfigRepository) : ViewMode
         mediaUri: String,
         uploadUri: String,
         downloadUri: String,
-        serverUrl: String
+        serverUrl: String,
+        specificScenario: String
     ) {
         if (load.isBlank() || load.toLong() < 10) {
             _configForm.value = ConfigFormState(testLoadError = R.string.invalid_test_load)

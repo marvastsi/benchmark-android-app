@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentDownloadBinding
@@ -117,7 +118,7 @@ class DownloadFragment : Fragment(), TextWatcher {
             "Download Executed: ${model.fileName()}",
             Toast.LENGTH_LONG
         ).show()
-        Thread.sleep(2000L)
+        Thread.sleep(Constants.DELAY_MS_MEDIUM)
         findNavController().navigate(R.id.action_DownloadFragment_to_StartFragment)
     }
 

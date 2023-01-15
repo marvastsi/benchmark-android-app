@@ -7,5 +7,6 @@ data class Config(
     val mediaUri: String,
     val uploadUri: String,
     val downloadUri: String,
-    val serverUrl: String
+    val serverUrl: String,
+    val specificScenario: Int
 )
