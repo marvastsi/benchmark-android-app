@@ -1,5 +1,6 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.login
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,14 +18,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
+import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
+import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment(), TextWatcher {
+    private lateinit var configRepository: ConfigRepository
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var loadingProgressBar: ProgressBar
+    private lateinit var config: Config
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -34,9 +41,16 @@ class LoginFragment : Fragment(), TextWatcher {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        val sharedPreferences = requireContext().getSharedPreferences(
+            ConfigStorage.TEST_CONFIG,
+            Context.MODE_PRIVATE
+        )
+        val configStorage = ConfigStorage(sharedPreferences)
+        configRepository = ConfigRepository(configStorage)
+        config = configRepository.getConfig()
         loginViewModel = ViewModelProvider(
             this,
-            LoginViewModelFactory(requireContext())
+            LoginViewModelFactory(requireContext(), config)
         )[LoginViewModel::class.java]
 
         usernameEditText = binding.username
@@ -117,7 +131,7 @@ class LoginFragment : Fragment(), TextWatcher {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome) + model.displayName
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
-        Thread.sleep(2000L)
+        Thread.sleep(Constants.DELAY_MS_MEDIUM)
         findNavController().navigate(R.id.action_LoginFragment_to_StartFragment)
     }
 

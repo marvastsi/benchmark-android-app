@@ -1,5 +1,6 @@
 package br.edu.utfpr.marvas.greenbenchmark.ui.download
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,13 +17,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
+import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
+import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentDownloadBinding
 
 class DownloadFragment : Fragment(), TextWatcher {
+    private lateinit var configRepository: ConfigRepository
     private lateinit var downloadViewModel: DownloadViewModel
     private lateinit var fileNameEditText: EditText
     private lateinit var downloadButton: Button
     private lateinit var loadingProgressBar: ProgressBar
+    private lateinit var config: Config
     private var _binding: FragmentDownloadBinding? = null
     private val binding get() = _binding!!
 
@@ -32,9 +39,16 @@ class DownloadFragment : Fragment(), TextWatcher {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDownloadBinding.inflate(inflater, container, false)
+        val sharedPreferences = requireContext().getSharedPreferences(
+            ConfigStorage.TEST_CONFIG,
+            Context.MODE_PRIVATE
+        )
+        val configStorage = ConfigStorage(sharedPreferences)
+        configRepository = ConfigRepository(configStorage)
+        config = configRepository.getConfig()
         downloadViewModel = ViewModelProvider(
             this,
-            DownloadViewModelFactory(requireContext())
+            DownloadViewModelFactory(requireContext(), config)
         )[DownloadViewModel::class.java]
 
         fileNameEditText = binding.fileName
@@ -62,7 +76,7 @@ class DownloadFragment : Fragment(), TextWatcher {
             executeDownload()
         }
 
-        fileNameEditText.setText(R.string.file_to_download)
+        fileNameEditText.setText(config.downloadUri)
         downloadButton.performClick()
     }
 
@@ -104,7 +118,7 @@ class DownloadFragment : Fragment(), TextWatcher {
             "Download Executed: ${model.fileName()}",
             Toast.LENGTH_LONG
         ).show()
-        Thread.sleep(2000L)
+        Thread.sleep(Constants.DELAY_MS_MEDIUM)
         findNavController().navigate(R.id.action_DownloadFragment_to_StartFragment)
     }
 

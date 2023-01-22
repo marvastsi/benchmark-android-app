@@ -5,11 +5,16 @@
     <string name="first_fragment_label">Green Benchmark</string>
     <string name="start">Start</string>
     <string name="start_fragment">Click the button to Start</string>
+    <string name="list_hint">
+            If a specific scenario was selected, then only this scenario will be executed N times,
+        where N = numberOfExecutions
+    </string>
 
     <string name="prompt_load_config">Number of Executions</string>
     <string name="action_config">Save Config</string>
     <string name="action_config_short">Save App Config</string>
-
+    <string name="prompt_server_url">Server url</string>
+    <string name="prompt_specific_scenario">Specific Scenario</string>
 
     <string name="action_account">Account Form</string>
     <string name="prompt_first_name">First Name</string>
@@ -32,7 +37,7 @@
     <string name="action_upload_short">Upload File</string>
 
     <string name="prompt_media">Media File</string>
-    <string name="action_media">Play</string>
+    <string name="action_media">Media Execution</string>
     <string name="action_media_short">Execute Media File</string>
 
     <!-- Strings related to login -->
@@ -53,6 +58,8 @@
     <string name="invalid_test_load">"Load must be >=10"</string>
     <string name="invalid_media_uri">"Media file is required"</string>
     <string name="invalid_upload_uri">"Upload file is required"</string>
+    <string name="invalid_download_uri">"Download file is required"</string>
+    <string name="invalid_server_url">"Server URL is required"</string>
 
     <string name="invalid_first_name">First Name cannot be null</string>
     <string name="invalid_email">Not a valid email</string>

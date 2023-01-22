@@ -34,7 +34,10 @@ class ConfigViewModel(private val configRepository: ConfigRepository) : ViewMode
     fun configDataChanged(
         load: String,
         mediaUri: String,
-        uploadUri: String
+        uploadUri: String,
+        downloadUri: String,
+        serverUrl: String,
+        specificScenario: String
     ) {
         if (load.isBlank() || load.toLong() < 10) {
             _configForm.value = ConfigFormState(testLoadError = R.string.invalid_test_load)
@@ -42,6 +45,10 @@ class ConfigViewModel(private val configRepository: ConfigRepository) : ViewMode
             _configForm.value = ConfigFormState(mediaUriError = R.string.invalid_media_uri)
         } else if (uploadUri.isBlank()) {
             _configForm.value = ConfigFormState(uploadUriError = R.string.invalid_upload_uri)
+        } else if (downloadUri.isBlank()) {
+            _configForm.value = ConfigFormState(downloadUriError = R.string.invalid_download_uri)
+        } else if (serverUrl.isBlank()) {
+            _configForm.value = ConfigFormState(serverUrlError = R.string.invalid_server_url)
         } else {
             _configForm.value = ConfigFormState(isDataValid = true)
         }
