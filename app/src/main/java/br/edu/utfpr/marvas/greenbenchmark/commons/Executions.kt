@@ -44,11 +44,11 @@ class TestExecution private constructor(private val config: Config) : IExecution
 
     companion object {
         private val scenarios: Map<Int, Scenario> = mapOf(
-            1 to R.id.action_StartFragment_to_LoginFragment,
-            2 to R.id.action_StartFragment_to_AccountFragment,
-            3 to R.id.action_StartFragment_to_DownloadFragment,
-            4 to R.id.action_StartFragment_to_UploadFragment,
-            5 to R.id.action_StartFragment_to_MediaFragment
+            1 to R.id.action_ExecutionFragment_to_LoginFragment,
+            2 to R.id.action_ExecutionFragment_to_AccountFragment,
+            3 to R.id.action_ExecutionFragment_to_DownloadFragment,
+            4 to R.id.action_ExecutionFragment_to_UploadFragment,
+            5 to R.id.action_ExecutionFragment_to_MediaFragment
         )
 
         private var instance: IExecution? = null
@@ -71,7 +71,7 @@ class TestExecution private constructor(private val config: Config) : IExecution
                 randomList(config.testLoad)
         }
 
-        private fun randomList(length: Long): List<Scenario> {
+        private fun randomList(length: Int): List<Scenario> {
             val first = 1
             val last = 5
             val list = mutableListOf<Scenario>()

@@ -14,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import br.edu.utfpr.marvas.greenbenchmark.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -49,11 +48,6 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
         if (shouldAskPermissions()) {
             askPermissions()
         }
@@ -70,11 +64,11 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_login -> navigateTo(R.id.action_StartFragment_to_LoginFragment)
-            R.id.action_account -> navigateTo(R.id.action_StartFragment_to_AccountFragment)
-            R.id.action_download -> navigateTo(R.id.action_StartFragment_to_DownloadFragment)
-            R.id.action_upload -> navigateTo(R.id.action_StartFragment_to_UploadFragment)
-            R.id.action_media -> navigateTo(R.id.action_StartFragment_to_MediaFragment)
+            R.id.action_login -> navigateTo(R.id.action_ExecutionFragment_to_LoginFragment)
+            R.id.action_account -> navigateTo(R.id.action_ExecutionFragment_to_AccountFragment)
+            R.id.action_download -> navigateTo(R.id.action_ExecutionFragment_to_DownloadFragment)
+            R.id.action_upload -> navigateTo(R.id.action_ExecutionFragment_to_UploadFragment)
+            R.id.action_media -> navigateTo(R.id.action_ExecutionFragment_to_MediaFragment)
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }

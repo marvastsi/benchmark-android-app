@@ -119,12 +119,12 @@ class DownloadFragment : Fragment(), TextWatcher {
             Toast.LENGTH_LONG
         ).show()
         Thread.sleep(Constants.DELAY_MS_MEDIUM)
-        findNavController().navigate(R.id.action_DownloadFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_DownloadFragment_to_ExecutionFragment)
     }
 
     private fun showDownloadFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_DownloadFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_DownloadFragment_to_ExecutionFragment)
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

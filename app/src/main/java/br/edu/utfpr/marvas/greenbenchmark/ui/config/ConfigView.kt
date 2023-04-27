@@ -3,7 +3,7 @@ package br.edu.utfpr.marvas.greenbenchmark.ui.config
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 
 data class ConfigView(
-    val testLoad: Long,
+    val testLoad: Int,
     val mediaUri: String,
     val uploadUri: String,
     val downloadUri: String,

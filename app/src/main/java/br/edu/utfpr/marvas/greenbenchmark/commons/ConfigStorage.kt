@@ -11,7 +11,7 @@ class ConfigStorage(
         with(sharedPreferences.edit()) {
             putString(MEDIA_URI_PARAM, config.mediaUri)
             putString(UPLOAD_URI_PARAM, config.uploadUri)
-            putLong(LOAD_PARAM, config.testLoad)
+            putInt(LOAD_PARAM, config.testLoad)
             putString(DOWNLOAD_URI_PARAM, config.downloadUri)
             putString(SERVER_URL_PARAM, config.serverUrl)
             putInt(SPECIFIC_SCENARIO, config.specificScenario)
@@ -22,7 +22,7 @@ class ConfigStorage(
     fun getConfig(): Config {
         val prefs = sharedPreferences.all
         return Config(
-            testLoad = prefs[LOAD_PARAM] as Long,
+            testLoad = prefs[LOAD_PARAM] as Int,
             mediaUri = prefs[MEDIA_URI_PARAM] as String,
             uploadUri = prefs[UPLOAD_URI_PARAM] as String,
             downloadUri = prefs[DOWNLOAD_URI_PARAM] as String,

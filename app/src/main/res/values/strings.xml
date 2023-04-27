@@ -12,9 +12,9 @@
 
     <string name="prompt_load_config">Number of Executions</string>
     <string name="action_config">Save Config</string>
-    <string name="action_config_short">Save App Config</string>
+    <string name="action_config_short">App Config</string>
     <string name="prompt_server_url">Server url</string>
-    <string name="prompt_specific_scenario">Specific Scenario</string>
+    <string name="prompt_specific_scenario">Select Scenario</string>
 
     <string name="action_account">Account Form</string>
     <string name="prompt_first_name">First Name</string>

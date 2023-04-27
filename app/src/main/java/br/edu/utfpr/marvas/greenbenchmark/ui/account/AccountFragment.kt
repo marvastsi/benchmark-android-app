@@ -210,12 +210,12 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
         val welcome = "Account created with id: " + model.accountId
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
         Thread.sleep(Constants.DELAY_MS_MEDIUM)
-        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_AccountFragment_to_ExecutionFragment)
     }
 
     private fun showAccountCreateFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_AccountFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_AccountFragment_to_ExecutionFragment)
     }
 
     private fun createArrayAdapter(

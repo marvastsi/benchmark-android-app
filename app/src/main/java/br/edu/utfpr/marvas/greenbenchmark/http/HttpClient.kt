@@ -217,6 +217,7 @@ class HttpClient {
                 }
             }
             fileOutputStream.flush()
+            fileOutputStream.close()
         }
 
         return file

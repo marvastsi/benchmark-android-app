@@ -83,7 +83,7 @@ class MediaFragment : Fragment() {
         println("Media Executed")
         Toast.makeText(requireContext(), "Media Executed", Toast.LENGTH_LONG).show()
         Thread.sleep(Constants.DELAY_MS_SHORT)
-        findNavController().navigate(R.id.action_MediaFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_MediaFragment_to_ExecutionFragment)
     }
 
     private fun showMediaExecutionFailed(mp: MediaPlayer, what: Int, extra: Int): Boolean {
@@ -93,7 +93,7 @@ class MediaFragment : Fragment() {
         Log.e(Tags.MEDIA_EXECUTION, msg)
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         mp.release()
-        findNavController().navigate(R.id.action_MediaFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_MediaFragment_to_ExecutionFragment)
         return true
     }
 

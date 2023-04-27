@@ -10,26 +10,26 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
-import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.commons.TestExecution
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
-import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
-import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentStartBinding
+import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentExecutionBinding
 
-class StartFragment : Fragment() {
+class ExecutionFragment : Fragment() {
     private lateinit var configRepository: ConfigRepository
-    private var _binding: FragmentStartBinding? = null
+    private var _binding: FragmentExecutionBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
-        val configStorage = ConfigStorage(requireContext().getSharedPreferences(
-            ConfigStorage.TEST_CONFIG,
-            Context.MODE_PRIVATE
-        ))
+        _binding = FragmentExecutionBinding.inflate(inflater, container, false)
+        val configStorage = ConfigStorage(
+            requireContext().getSharedPreferences(
+                ConfigStorage.TEST_CONFIG,
+                Context.MODE_PRIVATE
+            )
+        )
         configRepository = ConfigRepository(configStorage)
         return binding.root
     }
@@ -66,7 +66,7 @@ class StartFragment : Fragment() {
             startButton.text = getString(R.string.action_reconfigure)
             startButton.setOnClickListener {
                 testExecution.stop()
-                findNavController().navigate(R.id.action_StartFragment_to_ConfigFragment)
+                findNavController().navigate(R.id.action_ExecutionFragment_to_ConfigFragment)
             }
         }
     }

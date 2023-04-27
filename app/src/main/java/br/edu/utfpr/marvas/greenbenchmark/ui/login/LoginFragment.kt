@@ -132,12 +132,12 @@ class LoginFragment : Fragment(), TextWatcher {
         val welcome = getString(R.string.welcome) + model.displayName
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
         Thread.sleep(Constants.DELAY_MS_MEDIUM)
-        findNavController().navigate(R.id.action_LoginFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_LoginFragment_to_ExecutionFragment)
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_LoginFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_LoginFragment_to_ExecutionFragment)
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

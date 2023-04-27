@@ -114,7 +114,7 @@ class ConfigFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListen
     private fun doSave() {
         loadingProgressBar.visibility = View.VISIBLE
         val config = Config(
-            tvTestLoad.text.toString().toLong(),
+            tvTestLoad.text.toString().toInt(),
             mediaUri,
             uploadUri,
             tvDownloadFile.text.toString(),
@@ -165,7 +165,7 @@ class ConfigFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListen
         println("Test Configuration Loaded")
         Toast.makeText(requireContext(), "Config loaded: ${model.serverUrl}", Toast.LENGTH_SHORT)
             .show()
-        findNavController().navigate(R.id.action_ConfigFragment_to_StartFragment)
+        findNavController().navigate(R.id.action_ConfigFragment_to_ExecutionFragment)
     }
 
     private fun showConfigFailed(@StringRes errorString: Int) {

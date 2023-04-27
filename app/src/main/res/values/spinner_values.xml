@@ -6,7 +6,7 @@
         <item>+1</item>
     </string-array>
     <string-array name="scenarios">
-        <item>Specific scenario</item>
+        <item>Select scenario</item>
         <item>1 - Login API</item>
         <item>2 - Account Form</item>
         <item>3 - Download File</item>

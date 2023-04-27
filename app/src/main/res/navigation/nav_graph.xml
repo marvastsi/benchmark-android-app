@@ -12,38 +12,38 @@
         tools:layout="@layout/fragment_config">
 
         <action
-            android:id="@+id/action_ConfigFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_ConfigFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/StartFragment"
-        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.StartFragment"
+        android:id="@+id/ExecutionFragment"
+        android:name="br.edu.utfpr.marvas.greenbenchmark.ui.ExecutionFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_start">
+        tools:layout="@layout/fragment_execution">
 
         <action
-            android:id="@+id/action_StartFragment_to_ConfigFragment"
+            android:id="@+id/action_ExecutionFragment_to_ConfigFragment"
             app:destination="@id/ConfigFragment" />
 
         <action
-            android:id="@+id/action_StartFragment_to_LoginFragment"
+            android:id="@+id/action_ExecutionFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
 
         <action
-            android:id="@+id/action_StartFragment_to_AccountFragment"
+            android:id="@+id/action_ExecutionFragment_to_AccountFragment"
             app:destination="@id/AccountFragment" />
 
         <action
-            android:id="@+id/action_StartFragment_to_DownloadFragment"
+            android:id="@+id/action_ExecutionFragment_to_DownloadFragment"
             app:destination="@id/DownloadFragment" />
 
         <action
-            android:id="@+id/action_StartFragment_to_UploadFragment"
+            android:id="@+id/action_ExecutionFragment_to_UploadFragment"
             app:destination="@id/UploadFragment" />
 
         <action
-            android:id="@+id/action_StartFragment_to_MediaFragment"
+            android:id="@+id/action_ExecutionFragment_to_MediaFragment"
             app:destination="@id/MediaFragment" />
     </fragment>
 
@@ -54,8 +54,8 @@
         tools:layout="@layout/fragment_login">
 
         <action
-            android:id="@+id/action_LoginFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_LoginFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 
     <fragment
@@ -65,8 +65,8 @@
         tools:layout="@layout/fragment_account">
 
         <action
-            android:id="@+id/action_AccountFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_AccountFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 
     <fragment
@@ -76,8 +76,8 @@
         tools:layout="@layout/fragment_download">
 
         <action
-            android:id="@+id/action_DownloadFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_DownloadFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 
     <fragment
@@ -87,8 +87,8 @@
         tools:layout="@layout/fragment_upload">
 
         <action
-            android:id="@+id/action_UploadFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_UploadFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 
     <fragment
@@ -98,7 +98,7 @@
         tools:layout="@layout/fragment_media">
 
         <action
-            android:id="@+id/action_MediaFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_MediaFragment_to_ExecutionFragment"
+            app:destination="@id/ExecutionFragment" />
     </fragment>
 </navigation>
