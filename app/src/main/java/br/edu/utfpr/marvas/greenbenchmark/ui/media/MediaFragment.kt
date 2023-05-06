@@ -9,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
 import android.widget.ProgressBar
-import android.widget.Toast
 import android.widget.VideoView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.commons.Tags
+import br.edu.utfpr.marvas.greenbenchmark.commons.snack
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentMediaBinding
 
@@ -81,9 +80,9 @@ class MediaFragment : Fragment() {
 
     private fun exitMediaPlayer() {
         println("Media Executed")
-        Toast.makeText(requireContext(), "Media Executed", Toast.LENGTH_LONG).show()
+        requireView().snack("Media Executed")
         Thread.sleep(Constants.DELAY_MS_SHORT)
-        findNavController().navigate(R.id.action_MediaFragment_to_ExecutionFragment)
+        findNavController().navigateUp()
     }
 
     private fun showMediaExecutionFailed(mp: MediaPlayer, what: Int, extra: Int): Boolean {
@@ -91,9 +90,9 @@ class MediaFragment : Fragment() {
         val eErr = eErrors[extra] ?: UNKNOWN_ERROR
         val msg = "$wErr: $eErr"
         Log.e(Tags.MEDIA_EXECUTION, msg)
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        requireView().snack(msg)
         mp.release()
-        findNavController().navigate(R.id.action_MediaFragment_to_ExecutionFragment)
+        findNavController().navigateUp()
         return true
     }
 

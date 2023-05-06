@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,10 +18,10 @@ import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
+import br.edu.utfpr.marvas.greenbenchmark.commons.snack
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentUploadBinding
-import java.net.URLDecoder
 
 class UploadFragment : Fragment(), TextWatcher {
     private lateinit var configRepository: ConfigRepository
@@ -116,18 +114,15 @@ class UploadFragment : Fragment(), TextWatcher {
     }
 
     private fun updateUiWithFile(model: UploadFileView) {
-        Toast.makeText(
-            requireContext(),
-            "Upload Executed: ${model.fileName()}",
-            Toast.LENGTH_LONG
-        ).show()
-        Thread.sleep(Constants.DELAY_MS_MEDIUM)
+        val msg = "Upload Executed: ${model.fileName()}"
+        requireView().snack(msg)
+        Thread.sleep(Constants.DELAY_MS_SHORT)
         findNavController().navigate(R.id.action_UploadFragment_to_ExecutionFragment)
     }
 
     private fun showUploadFailed(@StringRes errorString: Int) {
-        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_UploadFragment_to_ExecutionFragment)
+        requireView().snack(errorString)
+        findNavController().navigateUp()
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

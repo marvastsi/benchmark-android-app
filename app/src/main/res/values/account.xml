@@ -5,7 +5,6 @@
     <bool name="active">true</bool>
     <string name="first_name">Marcelo</string>
     <string name="last_name">Vasconcelos</string>
-    <string name="birthdate">1990–08–21</string>
     <string name="username">greenbenchmark</string>
     <string name="password">greenbenchmark</string>
     <string name="phone_country_code">+55</string>

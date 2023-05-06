@@ -74,11 +74,7 @@ class AccountViewModel(
     }
 
     private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            isEmailValid(username)
-        } else {
-            username.isNotBlank()
-        }
+        return username.isNotBlank()
     }
 
     private fun isPasswordValid(password: String): Boolean {

@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
+import br.edu.utfpr.marvas.greenbenchmark.commons.snack
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentLoginBinding
@@ -129,15 +129,15 @@ class LoginFragment : Fragment(), TextWatcher {
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome) + model.displayName
-        Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
-        Thread.sleep(Constants.DELAY_MS_MEDIUM)
-        findNavController().navigate(R.id.action_LoginFragment_to_ExecutionFragment)
+        val msg = getString(R.string.welcome) + model.displayName
+        requireView().snack(msg)
+        Thread.sleep(Constants.DELAY_MS_SHORT)
+        findNavController().navigateUp()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_LoginFragment_to_ExecutionFragment)
+        requireView().snack(errorString)
+        findNavController().navigateUp()
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

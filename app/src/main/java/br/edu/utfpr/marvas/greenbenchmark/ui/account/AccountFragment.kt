@@ -18,7 +18,6 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.ArrayRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -29,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
 import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
+import br.edu.utfpr.marvas.greenbenchmark.commons.snack
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Account
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
@@ -207,15 +207,15 @@ class AccountFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListe
     }
 
     private fun updateUiWithAccount(model: AccountCreatedView) {
-        val welcome = "Account created with id: " + model.accountId
-        Toast.makeText(requireContext(), welcome, Toast.LENGTH_SHORT).show()
-        Thread.sleep(Constants.DELAY_MS_MEDIUM)
+        val msg = "Account created with id: " + model.accountId
+        requireView().snack(msg)
+        Thread.sleep(Constants.DELAY_MS_SHORT)
         findNavController().navigate(R.id.action_AccountFragment_to_ExecutionFragment)
     }
 
     private fun showAccountCreateFailed(@StringRes errorString: Int) {
-        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_AccountFragment_to_ExecutionFragment)
+        requireView().snack(errorString)
+        findNavController().navigateUp()
     }
 
     private fun createArrayAdapter(

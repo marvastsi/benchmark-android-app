@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
 import br.edu.utfpr.marvas.greenbenchmark.commons.ConfigStorage
+import br.edu.utfpr.marvas.greenbenchmark.commons.Constants
 import br.edu.utfpr.marvas.greenbenchmark.commons.TestExecution
 import br.edu.utfpr.marvas.greenbenchmark.data.ConfigRepository
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentExecutionBinding
@@ -58,16 +58,8 @@ class ExecutionFragment : Fragment() {
         } else {
             val text = getString(R.string.test_execution_finished)
             startTextview.text = text
-            Toast.makeText(
-                requireContext(),
-                text,
-                Toast.LENGTH_LONG
-            ).show()
             startButton.text = getString(R.string.action_reconfigure)
-            startButton.setOnClickListener {
-                testExecution.stop()
-                findNavController().navigate(R.id.action_ExecutionFragment_to_ConfigFragment)
-            }
+            startButton.visibility = View.INVISIBLE
         }
     }
 

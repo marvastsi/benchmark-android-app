@@ -16,7 +16,6 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ArrayRes
 import androidx.annotation.LayoutRes
@@ -26,6 +25,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.edu.utfpr.marvas.greenbenchmark.R
+import br.edu.utfpr.marvas.greenbenchmark.commons.snack
 import br.edu.utfpr.marvas.greenbenchmark.data.model.Config
 import br.edu.utfpr.marvas.greenbenchmark.databinding.FragmentConfigBinding
 
@@ -162,14 +162,14 @@ class ConfigFragment : Fragment(), TextWatcher, AdapterView.OnItemSelectedListen
     }
 
     private fun updateUiWithConfig(model: ConfigView) {
-        println("Test Configuration Loaded")
-        Toast.makeText(requireContext(), "Config loaded: ${model.serverUrl}", Toast.LENGTH_SHORT)
-            .show()
-        findNavController().navigate(R.id.action_ConfigFragment_to_ExecutionFragment)
+        println("App config saved")
+        val msg = "Config saved: ${model.serverUrl}"
+        requireView().snack(msg)
+        this.findNavController().navigate(R.id.action_ConfigFragment_to_ExecutionFragment)
     }
 
     private fun showConfigFailed(@StringRes errorString: Int) {
-        Toast.makeText(requireContext(), errorString, Toast.LENGTH_SHORT).show()
+        requireView().snack(errorString)
     }
 
     private fun createArrayAdapter(
