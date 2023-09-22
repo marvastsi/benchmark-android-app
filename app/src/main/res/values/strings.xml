@@ -5,6 +5,8 @@
     <string name="first_fragment_label">Green Benchmark</string>
     <string name="start">Start</string>
     <string name="start_fragment">Click the button to Start</string>
+    <string name="start_timestamp">Start:</string>
+    <string name="stop_timestamp">Stop:</string>
     <string name="list_hint">
             If a specific scenario was selected, then only this scenario will be executed N times,
         where N = numberOfExecutions
